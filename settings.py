@@ -1,0 +1,34 @@
+# pyrefly: ignore [missing-import]
+import pygame
+
+# Screen Dimensions
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 400
+
+# Game Settings
+FPS = 60
+BASE_SPEED = 6
+MAX_SPEED = 15
+SPEED_INCREMENT = 0.001
+OBSTACLE_SPAWN_MIN_DISTANCE = 300
+OBSTACLE_SPAWN_MAX_DISTANCE = 600
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GRAY = (150, 150, 150)
+DINO_COLOR = (83, 83, 83)
+CACTUS_COLOR = (34, 139, 34)
+GROUND_COLOR = (200, 200, 200)
+
+# Dino Physics
+GRAVITY = 0.6
+JUMP_VELOCITY = -10.5
+
+# Dimensions
+DINO_WIDTH = 40
+DINO_HEIGHT = 44
+DINO_DUCK_HEIGHT = 28
+
+# Floor Level
+FLOOR_Y = 300
