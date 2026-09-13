@@ -90,14 +90,27 @@ def extract_state(state_dict):
 
 #2. the neural network model
 class DinoBrain(nn.Module):
-    def __init__(self, input_size=6, hidden_size=64, output_size=3):
-        super(DinoBrain, self).__init__()
+    def __init__(self, input_dim = 7, output_dim = 3):
+        super().__init__()
+
         self.network = nn.Sequential(
-            nn.Linear(input_size, hidden_size),
+
+            nn.Linear(input_dim, 128),
             nn.ReLU(),
-            nn.Linear(hidden_size, hidden_size),
+
+            nn.Linear(128, 128),
             nn.ReLU(),
-            nn.Linear(hidden_size, output_size)
+
+            nn.Linear(128, 64),
+            nn.ReLU(),
+
+            # Output:
+            # 0 = Run
+            # 1 = Jump
+            # 2 = Duck
+
+            nn.Linear(64, output_dim)
+
         )
 
     def forward(self, x):
