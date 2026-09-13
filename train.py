@@ -13,29 +13,80 @@ import sys
 from game import DinoGame
 from settings import FPS
 
+# Device setup
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
+
+print(f"Training on: {device}")
+
 # 1. the state extraction function
 def extract_state(state_dict):
 
-    ''''Converrt the game dictionary to  a 6 number pytorch array'''
+    """
+    Converts the game state into 7 normalized values:
+
+    0 -> Dino Y position
+    1 -> Dino Y velocity
+    2 -> Distance to closest upcoming obstacle
+    3 -> Obstacle Y position
+    4 -> Obstacle width
+    5 -> Obstacle height
+    6 -> Game speed
+    """
+    dino_x = state_dict['dino_x']
     dino_y = state_dict['dino_y']
     dino_vel_y = state_dict['dino_vel_y']
     speed = state_dict['speed']
 
     obstacles = state_dict['obstacles']
-    if len(obstacles) > 0:
 
-        # Get x, y, width, and height of the closest obstacle
-        obs_x, obs_y, obs_w, obs_h = obstacles[0]
+    #only consider obsetecles that have not fully passed dino
+    upcoming_obstecles = [
+        obs
+        for obs in obstacles
+        if obs[0] + obs[2] > dino_x
+    ]
+
+    if upcoming_obstecles:
+
+        # find the closest one
+        obs_x, obs_y, obs_w, obs_h = min(
+            upcoming_obstecles,
+            key=lambda obs: obs[0] 
+        ) 
+
     else:
-        obs_x, obs_y, obs_w, obs_h = 800, 300, 0, 0
 
-    # We feed 6 variables to the neural network and normalize the data
-    return np.array([dino_y / 400.0,  # screen height is 400, so we normalize by that
-                     (dino_vel_y + 15) / 30, # velocity can range from -15 (fast jump) to +15 (fast fall), so we shift and scale to get 0-1
-                     obs_x / 800.0, # screen width is 800, so we normalize by that
-                     obs_y / 400.0, # screen height is 400, so we normalize by that
-                     obs_w / 50.0, # max obstacle width is around 50, so we normalize by that
-                     speed / 20], dtype=np.float32)
+         # Default values when no obstacle exists
+        obs_x = 800
+        obs_y = 300
+        obs_w = 0
+        obs_h = 0
+
+    # Distance between Dino and obstacles
+
+    distance_x = obs_x - dino_x
+
+    # Prevent starting the game with a negative distance (if Dino is already past the obstacle)
+    distance_x = max(0, distance_x)
+
+    return np.array(
+        [
+            dino_y / 400.0,
+            (dino_vel_y + 15.0) / 30.0,
+
+            # More useful than absolute obstacle X
+            distance_x / 800.0,
+
+            obs_y / 400.0,
+            obs_w / 50.0,
+            obs_h / 100.0,
+            speed / 20.0
+        ],
+        dtype=np.float32
+    )
+
 
 #2. the neural network model
 class DinoBrain(nn.Module):
