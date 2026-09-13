@@ -185,7 +185,7 @@ def train():
     # Target network
     target_model = DinoBrain().to(device)
 
-    target_model = load_state_dict(
+    target_model.load_state_dict(
         model.state_dict()
     )
 
