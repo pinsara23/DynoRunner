@@ -120,44 +120,57 @@ class DinoBrain(nn.Module):
 # 3. replay buffer
 class ReplayBuffer:
 
-    def __init__(self, capacity=100000):
+    def __init__(self, capacity=100_000):
         self.memory = deque(maxlen=capacity)
 
     def push(self, state, action, reward, next_state, done):
-        self.memory.append((state, action, reward, next_state, done))
+        self.memory.append(
+            (
+                state,
+                action,
+                reward,
+                next_state,
+                done
+            )
+        )
 
     def sample(self, batch_size):
 
-        batch = random.sample(self.memory, batch_size)
+        batch = random.sample(
+            self.memory,
+            batch_size
+        )
+
+        states, actions, rewards, next_states, dones = zip(*batch)
 
         states = torch.tensor(
             np.array(states),
             dtype=torch.float32,
-            device = device
+            device=device
         )
 
         actions = torch.tensor(
             actions,
             dtype=torch.long,
-            device = device
+            device=device
         ).unsqueeze(1)
 
         rewards = torch.tensor(
             rewards,
             dtype=torch.float32,
-            device = device
+            device=device
         ).unsqueeze(1)
 
         next_states = torch.tensor(
             np.array(next_states),
             dtype=torch.float32,
-            device = device
+            device=device
         )
 
         dones = torch.tensor(
             dones,
             dtype=torch.float32,
-            device = device
+            device=device
         ).unsqueeze(1)
 
         return (
@@ -269,7 +282,7 @@ def train():
             else:
 
                 #Use trained network
-                state_tensor = torch.FloatTensor(
+                state_tensor = torch.tensor(
                     state,
                     dtype=torch.float32,
                     device=device
