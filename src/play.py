@@ -7,9 +7,9 @@ import pygame
 import sys
 
 # Import from your existing files
-from src.game import DinoGame
-from src.train import DinoBrain, extract_state 
-from src.settings import FPS
+from game import DinoGame
+from train import DinoBrain, extract_state 
+from settings import FPS
 
 def play():
     # 1. Setup the Game and the Brain

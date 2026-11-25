@@ -10,8 +10,8 @@ from collections import deque
 import pygame
 import sys
 
-from src.game import DinoGame
-from src.settings import FPS
+from game import DinoGame
+from settings import FPS
 
 # Device setup
 device = torch.device(

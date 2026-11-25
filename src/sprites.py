@@ -1,6 +1,6 @@
 import pygame
 import random
-from src.settings import *
+from settings import *
 
 
 class Dino:
