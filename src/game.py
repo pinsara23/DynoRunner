@@ -1,8 +1,8 @@
 import pygame
 import random
 
-from settings import *
-from sprites import Dino, Obstacle, Ground
+from src.settings import *
+from src.sprites import Dino, Obstacle, Ground
 
 
 class DinoGame:

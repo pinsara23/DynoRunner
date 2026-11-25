@@ -1,8 +1,8 @@
 # pyrefly: ignore [missing-import]
 import pygame
 import sys
-from game import DinoGame
-from settings import FPS
+from src.game import DinoGame
+from src.settings import FPS
 
 def main():
     game = DinoGame()

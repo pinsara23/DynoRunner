@@ -7,9 +7,9 @@ import pygame
 import sys
 
 # Import from your existing files
-from game import DinoGame
-from train import DinoBrain, extract_state 
-from settings import FPS
+from src.game import DinoGame
+from src.train import DinoBrain, extract_state 
+from src.settings import FPS
 
 def play():
     # 1. Setup the Game and the Brain
@@ -18,10 +18,10 @@ def play():
     
     # 2. Load the trained weights
     try:
-        model.load_state_dict(torch.load("best_dino.pth"))
-        print("Successfully loaded best_dino.pth! Getting ready to play...")
+        model.load_state_dict(torch.load("best_average_dino.pth"))
+        print("Successfully loaded best_average_dino.pth! Getting ready to play...")
     except FileNotFoundError:
-        print("Error: Could not find 'best_dino.pth'. Make sure the file exists in this folder.")
+        print("Error: Could not find 'best_average_dino.pth'. Make sure the file exists in this folder.")
         return
 
     # Tell PyTorch we are evaluating (playing), not training
